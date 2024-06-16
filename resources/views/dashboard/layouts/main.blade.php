@@ -12,6 +12,18 @@
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <!-- Custom styles for this template -->
     <link href="/css/dashboard.css" rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="https://unpkg.com/trix@2.0.8/dist/trix.css">
+    <script type="text/javascript" src="https://unpkg.com/trix@2.0.8/dist/trix.umd.min.js"></script>
+
+    <style>
+        trix-toolbar [data-trix-button-group="file-tools"] {
+            display: none;
+        }
+    </style>
+</head>
+
+
 </head>
 
 <body>
@@ -99,14 +111,14 @@
         </symbol>
     </svg>
 
-@include('dashboard.layouts.header')
+    @include('dashboard.layouts.header')
 
     <div class="container-fluid">
         <div class="row">
-@include('dashboard.layouts.sidebar')
+            @include('dashboard.layouts.sidebar')
 
             <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-@yield('container')
+                @yield('container')
             </main>
         </div>
     </div>

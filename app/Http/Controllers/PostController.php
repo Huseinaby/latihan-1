@@ -13,7 +13,7 @@ class PostController extends Controller
     public function index(){
         $title = '';
 
-        if(request('caregory')){
+        if(request('caregory')) {
             $category = Category::firstWhere('slug', request('category'));
             $title = ' in '. $category->name;
         }
@@ -31,7 +31,6 @@ class PostController extends Controller
         ]);
     }
     
-
     public function show(Post $post){
         return view('post', [
             "title" => "Single Post",

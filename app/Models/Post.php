@@ -5,9 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+use Cviebrock\EloquentSluggable\Sluggable;
+
 class Post extends Model
 {
     use HasFactory;
+
+    use Sluggable;
 
     protected $guarded = ['id'];
 
@@ -15,26 +19,24 @@ class Post extends Model
 
     public function scopeFilter($query, array $filters)
     {
-        $query->when($filters['search'] ?? False, function($query, $search){
-            return $query->where(function($query) use ($search){
+        $query->when($filters['search'] ?? False, function ($query, $search) {
+            return $query->where(function ($query) use ($search) {
                 $query->Where('title', 'like', '%' . $search . '%')
-            ->orWhere('body', 'like', '%' . $search . '%');
+                    ->orWhere('body', 'like', '%' . $search . '%');
             });
         });
 
-        $query->when($filters['category'] ?? false, function($query, $category){
-            return $query->whereHas('category', function($query) use ($category){
+        $query->when($filters['category'] ?? false, function ($query, $category) {
+            return $query->whereHas('category', function ($query) use ($category) {
                 $query->where('slug', $category);
             });
         });
 
-        $query->when($filters['user'] ?? false, function($query, $user){
-            return $query->whereHas('user', function($query) use ($user){
+        $query->when($filters['user'] ?? false, function ($query, $user) {
+            return $query->whereHas('user', function ($query) use ($user) {
                 $query->where('username', $user);
             });
         });
-
-
     }
 
     public function category()
@@ -50,5 +52,14 @@ class Post extends Model
     public function getRouteKeyName()
     {
         return 'slug';
+    }
+
+    public function sluggable(): array
+    {
+        return [
+            'slug' => [
+                'souce' => 'title'
+            ]
+        ];
     }
 }

@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\RegisterController;
+use League\CommonMark\Extension\SmartPunct\DashParser;
 
 Route::get('/', function () {
     return view('home', [
@@ -68,3 +69,5 @@ Route::get('/dashboard', function(){
 })->middleware('auth');
 
 Route::resource('/dashboard/posts', DashboardPostController::class)->middleware('auth');
+
+Route::get('/dashboard/posts/checkSlug', [DashboardPostController::class, 'checkSlug'])->middleware('auth');
