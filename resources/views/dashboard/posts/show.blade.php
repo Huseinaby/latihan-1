@@ -9,7 +9,11 @@
 
             <a href="/dashboard/posts" class="btn btn-success">Back to My Posts</a>
             <a href="" class="btn btn-warning">Edit</a>
-            <a href="" class="btn btn-danger">Delete</a>
+            <form action="/dashboard/posts/{{ $post->slug }}" method="post" class="d-inline">
+                @method('delete')
+                @csrf
+                <button class="btn btn-danger border-0" onclick="return confirm('Are you sure?')"><span data-feather="x-circle">Hapus</span></button>
+              </form>
 
             <img src="/img/niji.jpeg" class="img-fluid mt-3" alt="" style="width: 100%">
             <article class="my-3">
