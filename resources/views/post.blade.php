@@ -8,7 +8,14 @@
                 <h2 class="mb-4">{{ $post->title }}</h2>
                 <p>By <a href="/posts?user={{ $post->user->username }}">{{ $post->user->name }}</a>
                     In <a href="/posts?category={{ $post->category->slug }}">{{ $post->category->name }}</a></p>
-                <img src="/img/niji.jpeg" alt="" style="width: 100%">
+                    @if ($post->image)
+                    <div style="max-height: 350px; overflow: hidden">
+                        <img src="{{ asset('storage/' . $post->image) }}" class="img-fluid mt-3" alt=""
+                            style="width: 100%">
+                    </div>
+                @else
+                    <img src="/img/niji.jpeg" class="img-fluid mt-3" alt="" style="width: 100%">
+                @endif
                 <article class="my-3">
                     {!! $post->body !!}
                 </article>
