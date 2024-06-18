@@ -44,14 +44,16 @@
             </div>
             <div class="mb-3">
                 <label for="image" class="form-label">Post Image</label>
+                <img class="img-preview img-fluid mb-3 col-sm-5">
                 <input class="form-control @error('image')
-                is-invalid @enderror" type="file" id="image" name="image">
+                is-invalid @enderror" type="file"
+                    id="image" name="image" onchange="previewImage()">
                 @error('image')
-                <div class="invalid-feedback">
-                    {{ $message }}
-                </div>
-            @enderror
-              </div>              
+                    <div class="invalid-feedback">
+                        {{ $message }}
+                    </div>
+                @enderror
+            </div>
             <div class="mb-3">
                 <label for="body" class="form-label">body</label>
                 @error('body')
@@ -64,43 +66,57 @@
         </form>
     </div>
     <script>
-document.addEventListener('DOMContentLoaded', function() {
-    const title = document.querySelector('#title');
-    const slug = document.querySelector('#slug');
+        document.addEventListener('DOMContentLoaded', function() {
+            const title = document.querySelector('#title');
+            const slug = document.querySelector('#slug');
 
-    title.addEventListener('input', async function() {
-        let titleValue = title.value;
-        let slugValue = titleValue.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/^[-]+|[-]+$/g, '');
-        
-        let result = await checkSlug(slugValue);
-        if (result.count > 0) {
-            let newSlug = slugValue;
-            let counter = 2;
+            title.addEventListener('input', async function() {
+                let titleValue = title.value;
+                let slugValue = titleValue.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(
+                    /^[-]+|[-]+$/g, '');
 
-            // Keep checking until we find a unique slug
-            while (result.count > 0) {
-                newSlug = `${slugValue}-${counter}`;
-                result = await checkSlug(newSlug);
-                counter++;
+                let result = await checkSlug(slugValue);
+                if (result.count > 0) {
+                    let newSlug = slugValue;
+                    let counter = 2;
+
+                    // Keep checking until we find a unique slug
+                    while (result.count > 0) {
+                        newSlug = `${slugValue}-${counter}`;
+                        result = await checkSlug(newSlug);
+                        counter++;
+                    }
+
+                    slug.value = newSlug;
+                } else {
+                    slug.value = slugValue;
+                }
+            });
+
+            async function checkSlug(slug) {
+                const response = await fetch(`/check-slug?slug=${slug}`);
+                const data = await response.json();
+                return data;
+            }
+        });
+
+        document.addEventListener('trix-file-accept', function(e) {
+            e.preventDefault();
+        });
+
+        function previewImage() {
+            const image = document.querySelector('#image');
+            const imgPreview = document.querySelector('.img-preview');
+
+            imgPreview.style.display = 'block';
+
+            const OFReader = new FileReader();
+            OFReader.readAsDataURL(image.files[0]);
+
+            OFReader.onload = function(OFREvent){
+                imgPreview.src = OFREvent.target.result;
             }
 
-            slug.value = newSlug;
-        } else {
-            slug.value = slugValue;
         }
-    });
-
-    async function checkSlug(slug) {
-        const response = await fetch(`/check-slug?slug=${slug}`);
-        const data = await response.json();
-        return data;
-    }
-});
-
-document.addEventListener('trix-file-accept', function(e) {
-    e.preventDefault();
-});
-
-
     </script>
 @endsection
