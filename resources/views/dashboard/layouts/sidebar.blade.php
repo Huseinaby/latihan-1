@@ -34,11 +34,12 @@
                         </svg>
                         <form action="/logout" method="POST">
                             @csrf
-                            <button type="submit" class="btn btn-link p-0 m-0 align-baseline" style="text-decoration: none">
+                            <button type="submit" class="btn btn-link p-0 m-0 align-baseline"
+                                style="text-decoration: none">
                                 Logout
                             </button>
                         </form>
-                    </div>                
+                    </div>
                 </li>
             </ul>
 
@@ -47,7 +48,17 @@
                     ADMINISTRATOR
                 </span>
             </h6>
-            <ul class="nav flex-column"></ul>
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link d-flex align-items-center gap-2  {{ Request::is('dashboard/categories') ? 'active' : '' }}"
+                        href="/dashboard/categories">
+                        <svg class="bi">
+                            <use xlink:href="#list" />
+                        </svg>
+                        Post Categories
+                    </a>
+                </li>
+            </ul>
         </div>
     </div>
 </div>
